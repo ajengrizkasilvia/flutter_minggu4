@@ -1,5 +1,6 @@
 # flutter_week4
-
+![.Plot](.image/ss1.jpeg)
+![.Plot](.image/ss5.jpeg)
 A new Flutter project.
 
 ## Getting Started
