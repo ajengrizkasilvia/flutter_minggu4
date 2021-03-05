@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'Convert.dart';
 import 'Input.dart';
 import 'Result.dart';
+import 'DropdownKonversi.dart';
 import 'Riwayat.dart';
 
 void main() {
@@ -16,11 +17,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final inputController = TextEditingController();
   double _inputUser = 0;
   double _kelvin = 0;
   double _reamur = 0;
   double _fahrenheit = 0;
+  final inputController = TextEditingController();
   String _newValue = "Kelvin";
   double _result = 0;
 
@@ -34,10 +35,17 @@ class _MyAppState extends State<MyApp> {
         _result = _inputUser + 273;
       else if (_newValue == "Reamur")
         _result = (4 / 5) * _inputUser;
-      else 
-        _result = (_inputUser * 9 / 5 ) + 32;
+      else
+        _result = (_inputUser * 9 / 5) + 32;
     });
     listViewItem.add("$_newValue : $_result");
+  }
+
+  void dropdownOnChanged(String changeValue) {
+    setState(() {
+      _newValue = changeValue;
+      perhitunganSuhu();
+    });
   }
 
   @override
@@ -58,37 +66,25 @@ class _MyAppState extends State<MyApp> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Input(inputUserController: inputController),
-              DropdownButton<String>(
-                items: listItem.map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                value: _newValue,
-                onChanged: (String changeValue) {
-                  setState(() {
-                    _newValue = changeValue;
-                    perhitunganSuhu();
-                  });
-                },
-              ),
+              dropdownKonversi(listItem: listItem, newValue: _newValue, dropdownOnChanged: dropdownOnChanged),
               Result(result: _result),
               Convert(konvertHandler: perhitunganSuhu),
-                    Container(
-                      margin: EdgeInsets.only(top: 10, bottom: 10),
-                      child: Text(
-                        "Riwayat Konversi",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ),
-                    Expanded(
-                      child: Riwayat(listViewItem: listViewItem),
-                    ),
-                  ],
+              Container(
+                margin: EdgeInsets.only(top: 10, bottom: 10),
+                child: Text(
+                  "Riwayat Konversi",
+                  style: TextStyle(fontSize: 20),
                 ),
               ),
+              Expanded(
+                child: Riwayat(listViewItem: listViewItem),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
+
+
